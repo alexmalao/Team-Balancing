@@ -12,12 +12,12 @@ sect.name <- "summoner.name"
 # TODO: update this to be the correct directory
 dataDir <- "L:\\Equal Partitioning\\data\\"
 fileName <- "data.csv"
-data <- read.table(paste(dataDir, fileName, sep = ""), as.is = TRUE, sep = ",", header = TRUE)
+data <- read.table(paste(dataDir, fileName, sep = ""), as.is = TRUE, sep = ",", quote="", header = TRUE)
 
 # converts the name to be usable by this code
 colnames(data)[which(names(data) == sect.tier)] <- "tier"
 colnames(data)[which(names(data) == sect.div)] <- "div"
-colnames(data)[which(names(data) == sect.name)] <- "Name"
+colnames(data)[which(names(data) == sect.name)] <- "name"
 
 ### approximates the mmr of each player
 mmr.tier <- list(c("bronze", "unranked", "silver", "gold", "platinum", "diamond"),
@@ -44,6 +44,9 @@ optimal.order <- NA
 # TODO: choose whether you want to use the optimal solution or the pseudo-optimal
 use.opt <- FALSE
 
+if (nrow(data) %% 5 != 0) {
+  stop("Stop, you have violated the law! Pay the court a fine or serve a sentence. Your teams are now forfeit.")
+}
 
 ### PSEUDO OPTIMAL SOLUTION - use this unless the data set is small enough
 # in almost every situation, this is preferred
@@ -56,7 +59,7 @@ if (!use.opt) {
   # Randomized solution
   for (idx.tries in 1:total.tries) {
     random.order <- data.frame(
-      Name = data$Name,
+      name = data$name,
       mmr = data$mmr,
       stringsAsFactors = FALSE
     )
@@ -82,13 +85,13 @@ if (!use.opt) {
 # factorial time algorithms are infinitesmally inefficient
 if (use.opt) {
   # the two permutations of mmr and names
-  perm.name <- permn(data$Name)
+  perm.name <- permn(data$name)
   perm.mmr <- permn(data$mmr)
   
   ### subsets into each group
   for (i in 1:length(perm.name)) {
     perm.order <- data.frame(
-      Name = perm.name[i],
+      name = perm.name[i],
       mmr = perm.mmr[i],
       stringsAsFactors = FALSE
     )
@@ -111,16 +114,28 @@ if (use.opt) {
 
 
 teamNums <- list()
+teamNums.mmr <- list()
 ### sets the team number for each group of five
 for (idx.team in 0:(nrow(optimal.order) / 5 - 1)) {
   
+  team.mmr <- 0
   for (idx.ind in 1:5) {
     teamNums[idx.team * 5 + idx.ind] <- idx.team + 1
+    team.mmr <- team.mmr + optimal.order$mmr[idx.team * 5 + idx.ind]
+  }
+  team.mmr <- team.mmr / 5
+  
+  for (idx.ind in 1:5) {
+    teamNums.mmr[idx.team * 5 + idx.ind] <- team.mmr
   }
 }
 
+print(paste("Average MMR: ", avg.mmr, sep=""))
+print(paste("Lowest Total Squared Average: ", lowest.score, sep=""))
+
 # sets the teamNumber to the individuals
 optimal.order$teamNum <- unlist(teamNums)
+optimal.order$teamMmr <- unlist(teamNums.mmr)
 
 write.csv(optimal.order, paste(dataDir, "Best Teams.csv", sep = ""), row.names = FALSE)
 
