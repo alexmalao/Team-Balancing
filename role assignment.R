@@ -116,4 +116,4 @@ for (idx.team in 0:(nrow(rolePref.data) / 5 - 1)) {
 rolePref.data$role <- unlist(teamRoles)
 
 
-write.csv(rolePref, paste(dataDir, "Final Teams.csv", sep = ""), row.names = FALSE)
+write.csv(rolePref.data, paste(dataDir, "Final Teams.csv", sep = ""), row.names = FALSE)

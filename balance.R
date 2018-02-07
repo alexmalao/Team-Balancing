@@ -42,6 +42,7 @@ lowest.score <- 99999999
 optimal.order <- NA
 
 # TODO: choose whether you want to use the optimal solution or the pseudo-optimal
+# optimal solution will take years past a set of size 10.
 use.opt <- FALSE
 
 if (nrow(data) %% 5 != 0) {
@@ -55,7 +56,7 @@ if (!use.opt) {
   # 10,000 > about < 5 seconds for set of size 10
   # 100,000 > about < 1 minute for set of size 10 (probably use this)
   # 1,000,000 > about < 5 minutes for set of size 10 (not recommended)
-  total.tries <- 100000
+  total.tries <- 1000000
   # Randomized solution
   for (idx.tries in 1:total.tries) {
     random.order <- data.frame(
