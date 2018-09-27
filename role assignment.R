@@ -13,7 +13,7 @@ sect.sup <- "support"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "L:\\Equal Partitioning\\data\\"
+dataDir <- "D:\\Balance Teams\\data\\"
 # TODO: input the Best Teams file crated from balance.R
 bestTeams.name <- "Best Teams.csv"
 # TODO: input the role preferences file
@@ -48,6 +48,9 @@ bestTeams.data <- bestTeams.data[order(bestTeams.data$name),]
 
 # add the team numbers into the players
 rolePref.data$teamNum <- bestTeams.data$teamNum
+
+# add the team mmr for the players
+rolePref.data$teamMmr <- bestTeams.data$teamMmr
 
 # sort rolePref.data by team numbers
 rolePref.data <- rolePref.data[order(rolePref.data$teamNum),]
