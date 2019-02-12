@@ -1,41 +1,41 @@
-summoner name,what is your tier,what div,team name
-a,bronze,4,1
-b,silver,1,1
-c,gold,3,1
-d,diamond,5,1
-e,bronze,2,1
-f,unranked,5,2
-g,bronze,3,2
-h,silver,4,2
-j,silver,2,2
-k,gold,5,2
-l,silver,2,
-m,unranked,,
-n,unranked,,
-o,bronze,2,4
-p,gold,2,4
-q,diamond,4,4
-r,platinum,5,4
-s,platinum,4,4
-t,platinum,3,
-u,silver,2,
-v,silver,4,
-w,silver,5,
-x,silver,5,
-y,gold,2,
-z,gold,4,
-aa ,gold,5,
-ab,diamond,1,
-ac,platinum,5,6
-ad,bronze,2,6
-ae,bronze,4,6
-af,silver,4,6
-ag,unranked,,6
-ah,unranked,,
-ai,unranked,,
-aj,gold,4,
-ak,silver,2,
-al,silver,3,
-am,silver,4,
-an,silver,5,
-ao,silver,2,
+Timestamp,Full Name,Husky Email,summoner.name,what is your tier,what div,top,jungle,middle,bottom,support
+9/23/2018 13:12,Adam Faulk,faulk.ad@husky.neu.edu,XanthousLanse,silver,3,1,4,3,5,3
+9/18/2018 19:26,Alec Chan,chan.al@husky.neu.edu,Amoneychan,gold,3,5,3,2,4,5
+9/26/2018 13:57,Amir Faghihi,faghihi.a@husky.neu.edu,krash20,silver,2,3,2,4,5,1
+9/23/2018 15:21,Amy Ying,ying.p@husky.neu.edu,BlueSkyCrime,platinum,5,2,2,4,3,5
+9/25/2018 17:08,Andrew Lee,lee.andrew2@husky.neu.edu,bataki,gold,5,2,3,4,5,1
+9/25/2018 17:00,Andrew Nguy,nguy.a@husky.neu.edu,With Bobá,silver,5,2,1,5,4,4
+9/24/2018 15:23,Anthony Mei,mei.an@husky.neu.edu,hi0987654321,silver,1,4,3,2,5,2
+9/23/2018 13:12,Brian Cheung,cheung.b@husky.neu.edu,Allowance,gold,3,3,1,1,5,5
+9/23/2018 18:15,Cameron Briggs,briggs.c@husky.neu.edu,camkings15,gold,2,3,5,4,2,1
+9/22/2018 9:09,Cameron Joseph,Joseph.cam@husky.neu.edu ,Shinsu Flow,silver,5,5,2,4,3,5
+9/25/2018 9:52,Connor Tidd,Tidd.c@husky.neu.edu,FireFerret,gold,1,1,3,4,5,5
+9/26/2018 12:03,Daniel Tan,tan.da@husky.neu.edu,ilikeplanes44,silver,4,4,2,3,3,4
+9/23/2018 22:38,Danny Lee,lee.on@husky.neu.edu,no tilt we gucci,silver,1,3,2,1,5,3
+9/19/2018 9:38,Deven Jacobi,jacobi.d@husky.neu.edu,tokenblack23,silver,1,2,1,3,4,5
+9/23/2018 16:54,Em Hu,hu.ma@husky.neu.edu,Flat Loli Girl,platinum,2,2,3,4,1,5
+9/25/2018 13:40,Ian Morris,morris.i@husky.neu.edu,Deadly Snare,silver,1,5,2,1,5,3
+9/18/2018 21:59,Jack Weng,weng.j@husky.neu.edu,Kaito K1D,diamond,5,3,1,5,4,2
+9/23/2018 19:29,Jimmy Lee,lee.jam@husky.neu.edu,lailmage,gold,5,3,2,4,4,1
+9/25/2018 16:37,Ken Ryumae,ryumae.k@husky.neu.edu,Ninja062920,silver,4,5,1,2,4,3
+9/23/2018 16:58,Kevin Hur,hur.k@husky.neu.edu,Kezin99,silver,4,4,2,5,5,4
+9/23/2018 14:04,Krishna Mohan,mohan.kr@husky.neu.edu,Ph0enix55,platinum,5,4,2,5,1,3
+9/26/2018 21:48,Lauren Burke,burke.lau@husky.neu.edu,GAM Sasaene,unranked,1,1,1,1,1,5
+9/23/2018 17:10,Liam Young,Young.lia@husky.neu.edu,Darkish Knight,gold,2,5,3,4,2,3
+9/20/2018 11:13,Michael Kwon,Kwon.ju@husky.neu.edu,Web88,platinum,4,3,1,4,5,2
+9/19/2018 11:08,Nikolla Qifti,qifti.n@husky.neu.edu,DrPajero8,platinum,4,1,3,1,1,5
+9/19/2018 16:09,Paul Shin,shin.h@husky.neu.edu,KangGaeri,platinum,3,5,1,5,1,1
+9/23/2018 14:05,Ryan Gong,gong.r@husky.neu.edu,Gongurt,gold,5,4,5,1,3,4
+9/25/2018 8:04,Ryan Mitchell,mitchell.rya@husky.neu.edu,MetalMink,unranked,1,1,1,3,5,5
+9/24/2018 20:50,Seamus Coffey-Gallagher,coffey-gallagher.s@husky.neu.edu,Seamus Senpai,platinum,4,3,1,4,5,4
+9/18/2018 19:34,Shuo Yang,yang.shuo2@husky.neu.edu,Are U OK Mi Fans,gold,5,3,3,3,5,2
+9/23/2018 13:52,Shyama Sastha Krishnamoorthy Srinivasan,krishnamoorthysrin.s@husky.neu.edu,dragonalchemist,gold,5,1,3,4,4,5
+9/22/2018 10:00,Sina Soltanieh,soltanieh.s@husky.neu.edu,Aduralescence,platinum,4,4,3,5,1,1
+9/25/2018 19:53,Thomas Nguyen,nguyen.thomas@husky.neu.edu,SuperSecSee,unranked,5,3,3,3,2,3
+9/23/2018 22:42,Trung Q Pham,pham.tru@husky.neu.edu,Tiero Pham,silver,4,2,1,5,3,5
+9/18/2018 20:20,Tyler Lew,Lew.t@husky.neu.edu,LylerTew,platinum,4,1,1,1,1,1
+9/22/2018 19:59,Vince Hung,hung.vi@husky.neu.edu,diamond tnt,gold,5,2,4,5,3,2
+9/22/2018 14:12,William Huang,Huang.wil@husky.neu.edu,Aion Zero,diamond,4,5,5,4,1,4
+9/26/2018 23:18,Amitesh Kumar,kumar.am@husky.neu.edu,ASHCR7,gold,4,2,3,5,1,4
+9/27/2018 1:21,Shashank Vedullapalli,vedullapalli.s@husky.neu.edu,omega spectre24,silver,2,3,3,4,1,5
+9/27/2018 9:52,Ryan Gong,gong.r@husky.neu,Gongurt,gold,5,4,5,1,4,3

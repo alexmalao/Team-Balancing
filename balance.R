@@ -10,7 +10,7 @@ sect.div <- "what.div"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "L:\\Equal Partitioning\\data\\"
+dataDir <- "D:\\Balance Teams\\data\\"
 fileName <- "data.csv"
 data <- read.table(paste(dataDir, fileName, sep = ""), as.is = TRUE, sep = ",", quote="", header = TRUE)
 
@@ -21,8 +21,8 @@ colnames(data)[which(names(data) == sect.name)] <- "name"
 
 ### approximates the mmr of each player
 mmr.tier <- list(c("bronze", "unranked", "silver", "gold", "platinum", "diamond"),
-                 c(830L, 1300L, 1180L, 1530L, 1880L, 2230L))
-mmr.div <- 69L
+                 c(830.0, 1300.0, 1180.0, 1530.0, 1880.0, 2230.0))
+mmr.div <- 69.0
 
 # replace the div for unranked players automatically to 5
 data$div[which(is.na(data$div))] <- 5
@@ -49,14 +49,28 @@ if (nrow(data) %% 5 != 0) {
   stop("Stop, you have violated the law! Pay the court a fine or serve a sentence. Your teams are now forfeit.")
 }
 
+
+# takes two ints and a data frame and swaps the rows
+swap.rows <- function(val1, val2, df) {
+  row1 <- df[val1,]
+  
+  df.copy <- data.frame(df)
+  df.copy[val1,] <- df[val2,]
+  df.copy[val2,] <- row1
+  return(df.copy)
+}
+
+
+
+
 ### PSEUDO OPTIMAL SOLUTION - use this unless the data set is small enough
 # in almost every situation, this is preferred
 if (!use.opt) {
   # TODO: total amount of tries
   # 10,000 > about < 5 seconds for set of size 10
-  # 100,000 > about < 1 minute for set of size 10 (probably use this)
-  # 1,000,000 > about < 5 minutes for set of size 10 (not recommended)
-  total.tries <- 1000000
+  # 100,000 > about < 1 minute for set of size 10 (not recommended)
+  # 1,000,000 > about < 5 minutes for set of size 10 (probably use this)
+  total.tries <- 10000
   # Randomized solution
   for (idx.tries in 1:total.tries) {
     random.order <- data.frame(
@@ -69,18 +83,52 @@ if (!use.opt) {
     # total squared average from the actual mean
     tsa <- 0
     
+    if (idx.tries %% 100000 == 0) {
+      print(paste("random ordering: ", idx.tries))
+    }
+    
+    # calculates teams average and adds the squared difference to total squared average
     for (idx.team in 0:(nrow(random.order) / 5 - 1)) {
-      
-      team.average <- sum(random.order$mmr[(idx.team + 1):(idx.team + 5)]) / 5
-      tsa <- tsa + (abs(team.average - avg.mmr))^2
+      idx.offset <- idx.team * 5
+      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5
+      tsa <- tsa + as.integer((team.average - avg.mmr)^2)
     }
     
     if (tsa < lowest.score) {
+      print(paste("lowest score dropped from ", lowest.score, " to ", tsa))
+      lowest.score <- tsa
+      optimal.order <- random.order
+    }
+  }
+  
+  # loop to calculate more effective pairs
+  for (idx.tries in 1:total.tries) {
+    
+    if (idx.tries %% 100000 == 0) {
+      print(paste("random swapping: ", idx.tries))
+    }
+    
+    int.swap <- sample.int(nrow(data), 2)
+    random.order <- swap.rows(int.swap[1], int.swap[2], optimal.order)
+    
+    # total squared average from the actual mean
+    tsa <- 0
+    
+    # calculates teams average and adds the squared difference to total squared average
+    for (idx.team in 0:(nrow(random.order) / 5 - 1)) {
+      idx.offset <- idx.team * 5
+      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5
+      tsa <- tsa + as.integer((team.average - avg.mmr)^2)
+    }
+    
+    if (tsa < lowest.score) {
+      print(paste("lowest score swapped from ", lowest.score, " to ", tsa))
       lowest.score <- tsa
       optimal.order <- random.order
     }
   }
 }
+
 
 ### OPTIMAL SOLUTION - consider scrapping because it is too powerful
 # factorial time algorithms are infinitesmally inefficient

@@ -17,7 +17,7 @@ dataDir <- "D:\\Balance Teams\\data\\"
 # TODO: input the Best Teams file crated from balance.R
 bestTeams.name <- "Best Teams.csv"
 # TODO: input the role preferences file
-rolePref.name <- "Role Pref.csv"
+rolePref.name <- "data.csv"
 
 # TODO: use check.names = FALSE if quote="" is still needed
 # bestTeams should be in format from balance.R script
