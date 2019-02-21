@@ -13,7 +13,7 @@ sect.sup <- "support"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "D:\\Balance Teams\\data\\"
+dataDir <- "F:\\Team-Balancing\\data\\"
 # TODO: input the Best Teams file crated from balance.R
 bestTeams.name <- "Best Teams.csv"
 # TODO: input the role preferences file
@@ -98,7 +98,7 @@ for (idx.team in 0:(nrow(rolePref.data) / 5 - 1)) {
 }
 
 # wow works really well
-rolePref.data <- rolePref.data[match(unlist(teamOrderList), rolePref.data$name),]
+rolePref.data <- rolePref.data[match(teamOrderList, rolePref.data$name),]
 
 teamRoles <- list()
 # given just this, the order is sorted for top jng mid adc sup

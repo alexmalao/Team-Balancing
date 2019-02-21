@@ -10,7 +10,7 @@ sect.div <- "what.div"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "D:\\Balance Teams\\data\\"
+dataDir <- "F:\\Team-Balancing\\data\\"
 fileName <- "data.csv"
 data <- read.table(paste(dataDir, fileName, sep = ""), as.is = TRUE, sep = ",", quote="", header = TRUE)
 
@@ -44,6 +44,7 @@ optimal.order <- NA
 # TODO: choose whether you want to use the optimal solution or the pseudo-optimal
 # optimal solution will take years past a set of size 10.
 use.opt <- FALSE
+use.duo <- TRUE
 
 if (nrow(data) %% 5 != 0) {
   stop("Stop, you have violated the law! Pay the court a fine or serve a sentence. Your teams are now forfeit.")
@@ -60,7 +61,68 @@ swap.rows <- function(val1, val2, df) {
   return(df.copy)
 }
 
+# finds the position of the duo player
+# set isLeft based on the duo player
+duo.placement <- function(duo.number, isLeft = TRUE) {
+  total.teams <- nrow(data) / 5
+  
+  if (isLeft) {
+    start.idx <- 1
+    spot.idx <- 1
+    while (duo.number > 1) {
+      if (spot.idx + 5 > nrow(data)) {
+        if (start.idx + 2 > 5) {
+          stop("Too many duo queues! Please remove some duos.")
+        }
+        else {
+          start.idx <- start.idx + 2
+          spot.idx <- start.idx
+        }
+      }
+      else {
+        spot.idx <- spot.idx + 5
+      }
+      duo.number <- duo.number - 1
+    }
+    return(spot.idx)
+  }
+  else {
+    start.idx <- 2
+    spot.idx <- 2
+    while (duo.number > 1) {
+      if (spot.idx + 5 > nrow(data)) {
+        if (start.idx + 2 > 5) {
+          stop("Too many duo queues! Please remove some duos.")
+        }
+        else {
+          start.idx <- start.idx + 2
+          spot.idx <- start.idx
+        }
+      }
+      else {
+        spot.idx <- spot.idx + 5
+      }
+      duo.number <- duo.number - 1
+    }
+    return(spot.idx)
+  }
+}
 
+
+# Grabs all the duo pairs into a list of pairs
+duo.queue1 <- list()
+duo.queue2 <- list()
+
+for (idx in 1:nrow(data)) {
+  if (data$duo[[idx]] != "") {
+    
+    if(!(data$duo[[idx]] %in% duo.queue1
+       || data$duo[[idx]] %in% duo.queue2)) {
+      duo.queue1[[length(duo.queue1) + 1]] <- data$name[[idx]]
+      duo.queue2[[length(duo.queue2) + 1]] <- data$duo[[idx]]
+    }
+  }
+}
 
 
 ### PSEUDO OPTIMAL SOLUTION - use this unless the data set is small enough
@@ -68,9 +130,17 @@ swap.rows <- function(val1, val2, df) {
 if (!use.opt) {
   # TODO: total amount of tries
   # 10,000 > about < 5 seconds for set of size 10
-  # 100,000 > about < 1 minute for set of size 10 (not recommended)
-  # 1,000,000 > about < 5 minutes for set of size 10 (probably use this)
-  total.tries <- 10000
+  # 100,000 > about < 1 minute for set of size 10 (recommended)
+  # 1,000,000 > about < 5 minutes for set of size 10
+  total.tries <- 30000
+  unswappable <- list()
+  bonus.elo <- rep(0L, nrow(data) / 5)
+  for (idx in 1:length(duo.queue1)) {
+    unswappable[[length(unswappable) + 1]] <- duo.placement(idx, TRUE)
+    unswappable[[length(unswappable) + 1]] <- duo.placement(idx, FALSE)
+    bonus.elo[idx %% length(bonus.elo)] <- 69L + bonus.elo[idx %% length(bonus.elo)]
+  }
+  
   # Randomized solution
   for (idx.tries in 1:total.tries) {
     random.order <- data.frame(
@@ -80,17 +150,26 @@ if (!use.opt) {
     )
     random.order <- random.order[sample(nrow(random.order)),]
     
+    if (idx.tries %% 10000 == 0) {
+      print(paste("random ordering: ", idx.tries))
+    }
+    
     # total squared average from the actual mean
     tsa <- 0
     
-    if (idx.tries %% 100000 == 0) {
-      print(paste("random ordering: ", idx.tries))
+    # adds the duo queue players to their team positions
+    for (idx in 1:length(duo.queue1)) {
+      left.summoner <- which(random.order$name %in% duo.queue1[[idx]])
+      right.summoner <- which(random.order$name %in% duo.queue2[[idx]])
+      
+      random.order <- swap.rows(duo.placement(idx, TRUE), left.summoner, random.order)
+      random.order <- swap.rows(duo.placement(idx, FALSE), right.summoner, random.order)
     }
     
     # calculates teams average and adds the squared difference to total squared average
     for (idx.team in 0:(nrow(random.order) / 5 - 1)) {
       idx.offset <- idx.team * 5
-      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5
+      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5 + bonus.elo[[idx.team + 1]]
       tsa <- tsa + as.integer((team.average - avg.mmr)^2)
     }
     
@@ -101,15 +180,24 @@ if (!use.opt) {
     }
   }
   
+  swappable <- list()
+  for (idx in 1:nrow(data)) {
+    if (!(idx %in% unswappable)) {
+      swappable[[length(swappable) + 1]] <- idx
+    }
+  }
+  
   # loop to calculate more effective pairs
   for (idx.tries in 1:total.tries) {
     
-    if (idx.tries %% 100000 == 0) {
+    if (idx.tries %% 10000 == 0) {
       print(paste("random swapping: ", idx.tries))
     }
     
-    int.swap <- sample.int(nrow(data), 2)
-    random.order <- swap.rows(int.swap[1], int.swap[2], optimal.order)
+    int.swap <- sample.int(length(swappable), 2)
+    swap1 <- int.swap[[1]]
+    swap2 <- int.swap[[2]]
+    random.order <- swap.rows(swappable[[swap1]], swappable[[swap2]], optimal.order)
     
     # total squared average from the actual mean
     tsa <- 0
@@ -117,7 +205,7 @@ if (!use.opt) {
     # calculates teams average and adds the squared difference to total squared average
     for (idx.team in 0:(nrow(random.order) / 5 - 1)) {
       idx.offset <- idx.team * 5
-      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5
+      team.average <- sum(random.order$mmr[(idx.offset + 1):(idx.offset + 5)]) / 5 + bonus.elo[[idx.team + 1]]
       tsa <- tsa + as.integer((team.average - avg.mmr)^2)
     }
     
