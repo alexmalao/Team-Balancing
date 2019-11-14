@@ -10,7 +10,7 @@ sect.div <- "what.div"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "F:\\Team-Balancing\\data\\"
+dataDir <- "D:\\cs4500\\Team-Balancing\\data\\"
 fileName <- "data.csv"
 data <- read.table(paste(dataDir, fileName, sep = ""), as.is = TRUE, sep = ",", quote="", header = TRUE)
 
@@ -21,14 +21,14 @@ colnames(data)[which(names(data) == sect.name)] <- "name"
 
 ### approximates the mmr of each player
 mmr.tier <- list(c("bronze", "unranked", "silver", "gold", "platinum", "diamond"),
-                 c(830.0, 1300.0, 1180.0, 1530.0, 1880.0, 2230.0))
-mmr.div <- 69.0
+                 c(470.0, 830.0, 1300.0, 1180.0, 1530.0, 1880.0, 2230.0))
+mmr.div <- 87.5
 
-# replace the div for unranked players automatically to 5
-data$div[which(is.na(data$div))] <- 5
+# replace the div for unranked players automatically to 4
+data$div[which(is.na(data$div))] <- 4
 
 # sort the mmr ranks descending
-data$mmr <- unlist(mmr.tier[2])[match(data$tier, unlist(mmr.tier[1]))] + ((5 - data$div) * mmr.div)
+data$mmr <- unlist(mmr.tier[2])[match(data$tier, unlist(mmr.tier[1]))] + ((4 - data$div) * mmr.div)
 data <- data[order(-data$mmr),]
 
 remove(mmr.tier)
@@ -133,12 +133,15 @@ if (!use.opt) {
   # 100,000 > about < 1 minute for set of size 10 (recommended)
   # 1,000,000 > about < 5 minutes for set of size 10
   total.tries <- 30000
+  total.swaps <- 100000
   unswappable <- list()
   bonus.elo <- rep(0L, nrow(data) / 5)
-  for (idx in 1:length(duo.queue1)) {
-    unswappable[[length(unswappable) + 1]] <- duo.placement(idx, TRUE)
-    unswappable[[length(unswappable) + 1]] <- duo.placement(idx, FALSE)
-    bonus.elo[idx %% length(bonus.elo)] <- 69L + bonus.elo[idx %% length(bonus.elo)]
+  if (use.duo) {
+    for (idx in 1:length(duo.queue1)) {
+      unswappable[[length(unswappable) + 1]] <- duo.placement(idx, TRUE)
+      unswappable[[length(unswappable) + 1]] <- duo.placement(idx, FALSE)
+      bonus.elo[idx %% length(bonus.elo)] <- 69L + bonus.elo[idx %% length(bonus.elo)]
+    }
   }
   
   # Randomized solution
@@ -158,12 +161,14 @@ if (!use.opt) {
     tsa <- 0
     
     # adds the duo queue players to their team positions
+    if (use.duo) {
     for (idx in 1:length(duo.queue1)) {
       left.summoner <- which(random.order$name %in% duo.queue1[[idx]])
       right.summoner <- which(random.order$name %in% duo.queue2[[idx]])
       
       random.order <- swap.rows(duo.placement(idx, TRUE), left.summoner, random.order)
       random.order <- swap.rows(duo.placement(idx, FALSE), right.summoner, random.order)
+    }
     }
     
     # calculates teams average and adds the squared difference to total squared average
@@ -188,7 +193,7 @@ if (!use.opt) {
   }
   
   # loop to calculate more effective pairs
-  for (idx.tries in 1:total.tries) {
+  for (idx.tries in 1:total.swaps) {
     
     if (idx.tries %% 10000 == 0) {
       print(paste("random swapping: ", idx.tries))

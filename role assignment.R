@@ -13,7 +13,7 @@ sect.sup <- "support"
 sect.name <- "summoner.name"
 
 # TODO: update this to be the correct directory
-dataDir <- "F:\\Team-Balancing\\data\\"
+dataDir <- "D:\\cs4500\\Team-Balancing\\data\\"
 # TODO: input the Best Teams file crated from balance.R
 bestTeams.name <- "Best Teams.csv"
 # TODO: input the role preferences file
