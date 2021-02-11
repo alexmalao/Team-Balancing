@@ -1,4 +1,6 @@
-====== Team-Balancing ======
+##====== Team-Balancing ======
+
+**These scripts are deprecated. Find the python equivalent [here](https://github.com/alexmalao/League-Team-Maker)**
 
 Pseudo optimal balancing of teams of 5 based on relative mmr.
 
