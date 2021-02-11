@@ -1,4 +1,4 @@
-##====== Team-Balancing ======
+## ====== Team-Balancing ======
 
 **These scripts are deprecated. Find the python equivalent [here](https://github.com/alexmalao/League-Team-Maker)**
 
